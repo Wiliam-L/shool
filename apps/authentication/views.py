@@ -4,6 +4,7 @@ from django.conf import settings
 from datetime import timedelta
 from django.utils import timezone
 import uuid
+from django.http import JsonResponse
 from django.views import View
 from .serializers import GroupSerializer, UserSerializer, CustomTokenObtainPairSerializer, UserShortSerailizer
 from django.contrib.auth.models import Group, User
@@ -186,23 +187,25 @@ class GroupView(viewsets.ModelViewSet):
     
 class CreateUserView(View):
     def post(self, request):
+        secret_token = request.POST.get('token')
+        if secret_token != settings.SUPERUSER_CREATION_TOKEN:
+            return JsonResponse({'message': 'Acceso denegado.'}, status=403)
+
         username = 'wlopez'
         email = 'admin@example.com'
         password = '123asdfgna'
-        
-        # Crea el grupo si no existe
+
         group, created = Group.objects.get_or_create(name='admin')
 
-        # Crea el superusuario si no existe
         user, created = User.objects.get_or_create(
             username=username,
             defaults={'email': email, 'is_active': True, 'is_superuser': True, 'is_staff': True}
         )
-        
+
         if created:
             user.set_password(password)
             user.save()
             user.groups.add(group)
+            return JsonResponse({'message': 'Superusuario creado y agregado al grupo.'}, status=201)
         else:
-            pass
-    
+            return JsonResponse({'message': 'El usuario ya existe.'}, status=400)
