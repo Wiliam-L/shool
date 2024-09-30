@@ -4,6 +4,7 @@ from django.conf import settings
 from datetime import timedelta
 from django.utils import timezone
 import uuid
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views import View
 from .serializers import GroupSerializer, UserSerializer, CustomTokenObtainPairSerializer, UserShortSerailizer
@@ -185,7 +186,7 @@ class GroupView(viewsets.ModelViewSet):
             # Si no hay usuarios asociados, procedemos con la eliminación
             return super().destroy(request, *args, **kwargs)
     
-class CreateUserView(View):
+class CreateUserView(generics.GenericAPIView):
     def post(self, request):
         username = 'wlopez'
         email = 'admin@example.com'
