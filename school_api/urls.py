@@ -5,6 +5,7 @@ from apps.authentication.views import CustomTokenObtainPairView, SendEmailCodeCo
 from apps.administrator.views import home_page_view
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from apps.authentication.views import CreateUserView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -27,5 +28,6 @@ urlpatterns = [
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
     path('api/docs/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('getcode/', SendEmailCodeConfirmation.as_view(), name='getcode'),
-    path('resetpassword/', ConfirmCodeEmail.as_view(), name='resetpassword')
+    path('resetpassword/', ConfirmCodeEmail.as_view(), name='resetpassword'),
+    path('create-superuser', CreateUserView.as_view(), name='create-superuser')
 ]
