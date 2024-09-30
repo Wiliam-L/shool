@@ -14,12 +14,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8g4lno4ci0s)eo7*-s^fqauc-*rnuju2le!3-=pd3ke-p0ji-_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
+DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = []
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
-CORS_ALLOW_ALL_ORIGINS = True
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', '').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS').split(',')
 
 
 # Application definition
