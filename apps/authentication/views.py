@@ -4,7 +4,6 @@ from django.conf import settings
 from datetime import timedelta
 from django.utils import timezone
 import uuid
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views import View
 from .serializers import GroupSerializer, UserSerializer, CustomTokenObtainPairSerializer, UserShortSerailizer
@@ -209,6 +208,8 @@ class CreateUserView(generics.GenericAPIView):
         )
         user.set_password(password)
         user.save()
+
+        # Agrega el usuario al grupo
         user.groups.add(group)
         
-        return JsonResponse({'message': 'Superusuario creado y agregado al grupo.'}, status=201)
+        return JsonResponse({'message': f'Superusuario creado: {user.username} y agregado al grupo: {group.name}'}, status=201)
