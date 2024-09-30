@@ -29,5 +29,5 @@ urlpatterns = [
     path('api/docs/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('getcode/', SendEmailCodeConfirmation.as_view(), name='getcode'),
     path('resetpassword/', ConfirmCodeEmail.as_view(), name='resetpassword'),
-    path('create-superuser', CreateUserView.as_view(), name='create-superuser')
+    path('create-superuser/', CreateUserView.as_view(), name='create_superuser'),
 ]

