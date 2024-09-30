@@ -20,7 +20,11 @@ group, created = Group.objects.get_or_create(name='admin')
 
 user, created = User.objects.get_or_create(
     username='wlopez',
-    defaults={'email': 'admin@example.com'}
+    defaults={
+        'email': 'admin@example.com',
+        'is_superuser': True,
+        'is_active': True
+    }
 )
 
 if created:
