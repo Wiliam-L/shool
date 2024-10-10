@@ -108,7 +108,7 @@ class UserShortListApiView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserShortSerailizer
 
-class UserViewSet(viewsets.ModelViewSet):
+class  UserViewSet(viewsets.ModelViewSet):
     """
     administrador: CRUD de usuarios
     """
