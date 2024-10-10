@@ -67,7 +67,7 @@ class TutorSerializer(serializers.ModelSerializer):
             if not groupname:
                 raise serializers.ValidationError(f"El usuario no pertenece a ningún grupo.")
 
-            if groupname.lower() not in {name.lower() for name in TutorNames}:
+            if groupname.lower() not in {name.lower() for name in TutorNames()}:
                 raise serializers.ValidationError(f"El grupo no es correcto para este usuario. Se encontró: {groupname}")
 
             if Tutor.objects.filter(user=user).exists():

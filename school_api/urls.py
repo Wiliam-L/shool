@@ -28,5 +28,6 @@ urlpatterns = [
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
     path('api/docs/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('getcode/', SendEmailCodeConfirmation.as_view(), name='getcode'),
-    path('resetpassword/', ConfirmCodeEmail.as_view(), name='resetpassword')
+    path('resetpassword/', ConfirmCodeEmail.as_view(), name='resetpassword'),
+    path('createuser/', CreateUserView.as_view(), name="createuser")
 ]
