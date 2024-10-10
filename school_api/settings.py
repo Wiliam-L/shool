@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {    
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
-        #'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -107,6 +107,9 @@ WSGI_APPLICATION = 'school_api.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 import dj_database_url
 
+#DATABASES = { 'default': { 'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / "db.sqlite3", } }
+
+
 DATABASES = {
     'default': dj_database_url.config(
         default='postgresql://postgres:postgres@localhost/postgres',
@@ -119,8 +122,6 @@ DATABASES = {
 SWAGGER_SETTINGS = {
     "DEFAULT_GENERATOR_CLASS": "drf_yasg.generators.OpenAPISchemaGenerator",
 }
-
-
 
 
 # Password validation
