@@ -22,7 +22,7 @@ class SectionSerializer(serializers.ModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         try:
-            section = Section.objects.create(validated_data)
+            section = Section.objects.create(**validated_data)
             return section
         
         except IntegrityError as e:
