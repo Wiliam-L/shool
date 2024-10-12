@@ -118,11 +118,9 @@ DATABASES = {
     )
 }
 
-
 SWAGGER_SETTINGS = {
     "DEFAULT_GENERATOR_CLASS": "drf_yasg.generators.OpenAPISchemaGenerator",
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -150,18 +148,16 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'GMT-06:00'
 
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

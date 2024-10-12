@@ -75,8 +75,6 @@ class ConfirmCodeEmail(generics.GenericAPIView):
         if not email:
             return Response({'error': 'El correo es obligatorio.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        
-
         try:
             user=User.objects.get(email=email)
             verification = EmailVerification.objects.get(user=user)
@@ -153,7 +151,6 @@ class  UserViewSet(viewsets.ModelViewSet):
 
         return super().destroy(request, *args, **kwargs)
 
-#grupos
 class GroupView(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
