@@ -153,7 +153,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'GMT-06:00'
+TIME_ZONE = 'America/Guatemala'
 
 USE_I18N = True
 
