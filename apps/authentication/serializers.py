@@ -50,7 +50,6 @@ class GroupSerializer(serializers.ModelSerializer):
         group = Group.objects.create(name=name)
         return group
 
-
 class UserShortSerailizer(serializers.ModelSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False)
 
@@ -62,7 +61,6 @@ class UserShortSerailizer(serializers.ModelSerializer):
         representation  = super().to_representation(instance)
         representation['groups'] = [group.name for group in instance.groups.all()]
         return representation 
-
 
 class UserSerializer(serializers.ModelSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False)

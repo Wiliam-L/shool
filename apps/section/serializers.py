@@ -1,14 +1,15 @@
 from rest_framework import serializers
 from django.db import IntegrityError, transaction
-from .models import Section
+from .models import Section, Level
 
 class SectionSerializer(serializers.ModelSerializer):
+    level = serializers.PrimaryKeyRelatedField(queryset=Level.objects.all(), required=True)
     class Meta:
         model = Section
-        fields = ['id', 'name', 'description']
+        fields = ['id', 'name', 'description', 'level']
 
         extra_kwargs = {
-            'name': {'required': True}
+            'name': {'required': True},
         }
 
 
