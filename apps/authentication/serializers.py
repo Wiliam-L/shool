@@ -33,7 +33,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise serializers.ValidationError({"group": f"{user}, no es - {request_group}"})
 
         return data
-    
     pass
 
 class GroupSerializer(serializers.ModelSerializer):

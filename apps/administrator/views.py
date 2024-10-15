@@ -1,24 +1,36 @@
 from django.db import transaction, IntegrityError
-from django.db.models.functions import Lower
-from django.contrib.auth.models import User
-from rest_framework import viewsets, generics, status, serializers
+from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
 from apps.student.serializers import Student, StudentAllSerializer, StudentShortSerializer
 from apps.registration.serializers import CourseRegistration, CourseRegistrationSerializer
 from apps.note.serializers import NoteSerializers, Note
-from apps.tutor.serializers import Tutor, TutorSerializer
+from apps.tutor.serializers import Tutor, TutorStudentSerializer
 from apps.teacher.serializers import Teacher, Speciality, SpecialitySerializer, TeacherSerializer
-from apps.course.serializers import CourseSerializer, Course, LevelSerializer, Level
+from apps.course.serializers import CourseSerializer, Course, CourseSchedule, CourseScheduleSerializer, TeacherCourseAssignment, TeacherCourseAssignmentSerializer
 from apps.grade.serializers import Grade, GradeSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAdminUser
 
-
+#cursos generales
 class CourseViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
+#horarios para cursos
+class CourseScheduleView(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
+    queryset = CourseSchedule.objects.all()
+    serializer_class = CourseScheduleSerializer
+
+#asignación de cursos a profesor
+class TeacherCourseAssignmentView(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
+    queryset =  TeacherCourseAssignment.objects.all()
+    serializer_class = TeacherCourseAssignmentSerializer
 
 #Matricula alumnos
 class RegistrationStudentViewSet(viewsets.ModelViewSet):
@@ -65,7 +77,7 @@ class TutorViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
     queryset = Tutor.objects.all()
-    serializer_class = TutorSerializer
+    serializer_class = TutorStudentSerializer
 
 # views.py
 class TeacherViewSet(viewsets.ModelViewSet):
@@ -106,17 +118,8 @@ class SpecialityViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class LevelViewSet(viewsets.ModelViewSet):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminUser]
-
-    queryset = Level.objects.all()
-    serializer_class = LevelSerializer
-
 
 
 from django.http import HttpResponse
-
-
 def home_page_view(request):
     return HttpResponse("Hello, World!")

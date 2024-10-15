@@ -5,9 +5,10 @@ from apps.authentication.permissions import IsInGroup
 from .models import Tutor
 from apps.student.models import Student
 from apps.student.serializers import StudentShortSerializer
-from apps.registration.serializers import ShortCourseRegistrationSerializer, CourseRegistration
+from apps.registration.serializers import CourseRegistrationSerializer, CourseRegistration
+from apps.course.models import TeacherCourseAssignment
 from apps.note.serializers import NoteSerializers, Note
-from apps.teacher.serializers import ShortTeacherSerializer, TeacherSerializer, Teacher
+from apps.teacher.serializers import TeacherForTutorSerializer, Teacher
 
 class StudentListApiView(ListAPIView): 
     """Para tutor: 
@@ -34,7 +35,7 @@ class ShowCoursesApiView(ListAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsInGroup]
     allowed_groups = namesGroup.TutorNames()
-    serializer_class = ShortCourseRegistrationSerializer
+    serializer_class = CourseRegistrationSerializer
 
     def get_queryset(self):
         user=self.request.user
@@ -52,7 +53,7 @@ class ShowNotesApiView(ListAPIView):
     serializer_class = NoteSerializers
 
     def get_queryset(self):
-        user = self.request.user
+        user=self.request.user
         try:
             tutor = Tutor.objects.get(user=user)
         except Note.DoesNotExist: return Note.objects.none()
@@ -64,14 +65,16 @@ class ShowTeachersApiView(ListAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsInGroup]
     allowed_groups = namesGroup.TutorNames()
-    serializer_class = TeacherSerializer
+    serializer_class = TeacherForTutorSerializer
 
     def get_queryset(self):
         user = self.request.user
         try:
             tutor = Tutor.objects.get(user=user)
-        except Tutor.DoesNotExist: return Teacher.objects.none()
+        except Tutor.DoesNotExist:
+            return Teacher.objects.none()
+        
         students = Student.objects.filter(tutor=tutor)
         registrations = CourseRegistration.objects.filter(student__in=students)
-        return Teacher.objects.filter(courseregistration__in=registrations).distinct()
-        
+       
+        return Teacher.objects.filter(teachercourseassignment__in=TeacherCourseAssignment.objects.filter(course__in=registrations.values_list('grade', flat=True))).distinct()

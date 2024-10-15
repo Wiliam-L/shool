@@ -14,7 +14,6 @@ class Teacher(models.Model):
     speciality = models.ManyToManyField(Speciality) 
     name = models.CharField(max_length=255, unique=True)
     phone = models.CharField(max_length=11)
-    level = models.ManyToManyField('course.Level')
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 

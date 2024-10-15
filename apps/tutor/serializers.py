@@ -2,10 +2,27 @@ from rest_framework import serializers
 from django.db import transaction, IntegrityError
 from .models import Tutor
 from django.contrib.auth.models import User
+from apps.student.models import Student
 from apps.administrator.namesGroup import TutorNames
+
+class TutorStudentSerializer(serializers.ModelSerializer):
+    student = serializers.SerializerMethodField()
+    class Meta:
+        model = Tutor
+        fields = ['name', 'phone', 'address','user', 'student']
+    
+    def get_student(self, obj):
+        students = Student.objects.filter(tutor=obj)
+        return [student.name for student in students]
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.user: representation['user'] = {'email': instance.user.email}
+        return representation
 
 class ShortTutorSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
     class Meta:
         model = Tutor
         fields = ['name', 'phone', 'address','user']

@@ -1,12 +1,11 @@
 from rest_framework import serializers
 from django.db import IntegrityError, transaction
-from .models import Section, Level
+from .models import Section
 
 class SectionSerializer(serializers.ModelSerializer):
-    level = serializers.PrimaryKeyRelatedField(queryset=Level.objects.all(), required=True)
     class Meta:
         model = Section
-        fields = ['id', 'name', 'description', 'level']
+        fields = ['id', 'name']
 
         extra_kwargs = {
             'name': {'required': True},
@@ -17,7 +16,6 @@ class SectionSerializer(serializers.ModelSerializer):
         name = data.get('name')
         if name and Section.objects.filter(name__iexact=name).exists():
             raise serializers.ValidationError({'name': f'la seccion {name} ya existe'})
-        
         return data
 
     @transaction.atomic

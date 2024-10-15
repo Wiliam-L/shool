@@ -1,19 +1,21 @@
 from django.db import models
 from apps.student.models import Student
+from apps.course.models import TeacherCourseAssignment
+from apps.grade.models import Grade
+from apps.section.models import Section
 
 class CourseRegistration(models.Model):
     student = models.ForeignKey(Student, on_delete=models.PROTECT)
-    level = models.ForeignKey('course.Level', on_delete=models.PROTECT)
-    course = models.ManyToManyField('course.Course')
-    section = models.ForeignKey('section.Section', on_delete=models.PROTECT)
-    teacher = models.ManyToManyField('teacher.Teacher')
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    create_date = models.TimeField(auto_now_add=True)
-    update_date = models.TimeField(auto_now=True)
+    teacher_course_assignment = models.ManyToManyField(TeacherCourseAssignment)
+    grade = models.ForeignKey(Grade, on_delete=models.PROTECT)
+    section = models.ForeignKey(Section, on_delete=models.PROTECT)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
 
     class Meta:
         db_table = 'course_registration'
+
     
-    def __str__(self) -> str:
-        return f"{self.student.name} - Sección {self.section.name} - Nivel {self.level}"
+    def __str__(self):
+        return f"{self.student.name} - {self.teacher_course_assignment} - Sección {self.teacher_course_assignment}"
