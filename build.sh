@@ -9,5 +9,5 @@ pip install -r requirements.txt
 python manage.py collectstatic --no-input
 
 # Ejecutar migraciones
-python manage.py makemigrations
-python manage.py migrate
+#python manage.py makemigrations
+#python manage.py migrate
