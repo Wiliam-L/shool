@@ -6,7 +6,7 @@ from rest_framework.generics import ListAPIView
 from apps.administrator import namesGroup
 from apps.course.serializers import Course, TeacherCourseAssignment
 from apps.registration.serializers import CourseRegistration
-from apps.teacher.serializers import TeacherSerializer, TeacherCourseAssignmentSerializer
+from apps.teacher.serializers import TeacherSerializer, TeacherOfCourseAssignmentSerializer
 from apps.student.serializers import Student, StudentShortSerializer
 from apps.note.serializers import Note, NoteSerializers
 
@@ -33,7 +33,7 @@ class CoursesApiView(ListAPIView):
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsInGroup]
-    serializer_class = TeacherCourseAssignmentSerializer
+    serializer_class = TeacherOfCourseAssignmentSerializer
     allowed_groups = namesGroup.TeacherNames()
 
     def get_queryset(self):

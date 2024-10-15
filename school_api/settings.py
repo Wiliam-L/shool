@@ -108,14 +108,14 @@ WSGI_APPLICATION = 'school_api.wsgi.application'
 
 import dj_database_url
 
-#DATABASES = { 'default': { 'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / "db.sqlite3", } }
+DATABASES = { 'default': { 'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / "db.sqlite3", } }
 
-DATABASES = {
+"""DATABASES = {
     'default': dj_database_url.config(
         default='postgresql://postgres:postgres@localhost/postgres',
         conn_max_age=600
     )
-}
+}"""
 
 SWAGGER_SETTINGS = {
     "DEFAULT_GENERATOR_CLASS": "drf_yasg.generators.OpenAPISchemaGenerator",

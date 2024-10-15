@@ -30,7 +30,7 @@ class ShortTeacherSerializer(serializers.ModelSerializer):
         fields = ['name', 'speciality']
 
 #información del profesor sobre sus cursos por grado
-class TeacherCourseAssignmentSerializer(serializers.ModelSerializer):
+class TeacherOfCourseAssignmentSerializer(serializers.ModelSerializer):
     course = serializers.CharField(source='course.name')
     grade = serializers.CharField(source='grade.name')
     section = serializers.CharField(source='section.name')
@@ -44,7 +44,7 @@ class TeacherCourseAssignmentSerializer(serializers.ModelSerializer):
 class TeacherForAdminSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
     speciality = serializers.PrimaryKeyRelatedField(many=True, queryset=Speciality.objects.all(), required=True)
-    course_assignments = TeacherCourseAssignmentSerializer(source='teachercourseassignment_set', many=True, read_only=True)
+    course_assignments = TeacherOfCourseAssignmentSerializer(source='teachercourseassignment_set', many=True, read_only=True)
     
     class Meta:
         model = Teacher
