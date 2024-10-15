@@ -4,11 +4,11 @@ from apps.tutor.models import Tutor
 from apps.administrator.namesGroup import StudentNames
 from django.db import transaction, IntegrityError
 from django.contrib.auth.models import User
-from apps.registration.serializers import CourseRegistration, CourseRegistrationSerializer
-from apps.course.serializers import CourseSerializer
+from apps.registration.serializers import CourseRegistration
 from apps.teacher.serializers import TeacherSerializer
-from apps.tutor.serializers import Tutor, TutorSerializer
+from apps.tutor.serializers import Tutor
 
+#información del estudiante desde la persepectiva del profesor
 class StudentForTeacher(serializers.ModelSerializer):
     tutor = serializers.SerializerMethodField()
     courses = serializers.SerializerMethodField()
@@ -22,12 +22,20 @@ class StudentForTeacher(serializers.ModelSerializer):
         return {'name': obj.tutor.name}
     
     def get_courses(self, obj):
-        registrations = CourseRegistration.objects.filter(student=obj)
-        return CourseSerializer(registrations.values('course'), many=True).data
+        registrations = CourseRegistration.objects.filter(student=obj).prefetch_related('teacher_course_assignment')
+        courses = []
+        for registration in registrations:
+            for assignment in registration.teacher_course_assignment.all():
+                courses.append({
+                    'id': assignment.course.id,
+                    'name': assignment.course.name,  # Asegúrate de que 'course' tenga el campo 'name'
+                })
+        return courses
 
     def get_teachers(self, obj):
         registrations = CourseRegistration.objects.filter(student=obj)
-        return TeacherSerializer(registrations.values('teacher'), many=True).data
+        teacher_ids = registrations.values_list('teacher_course_assignment__teacher', flat=True)
+        return TeacherSerializer(teacher_ids, many=True).data
 
 class StudentShortSerializer(serializers.ModelSerializer):
     tutor = serializers.SerializerMethodField()
@@ -40,6 +48,7 @@ class StudentShortSerializer(serializers.ModelSerializer):
             return {
                 'name': obj.tutor.name
             }
+
 
 class StudentAllSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True) 

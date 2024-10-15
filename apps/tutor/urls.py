@@ -8,5 +8,5 @@ urlpatterns = [
     path('student/', StudentListApiView.as_view(), name="tutor-student"),
     path('courses/', ShowCoursesApiView.as_view(), name='courses-students'),
     path('notes/', ShowNotesApiView.as_view(), name='notes-students'),
-    path('teachers/', ShowTeachersApiView.as_view(), name='teachers-students')
+    path('teacher/', ShowTeachersApiView.as_view(), name='teacher-students')
 ]

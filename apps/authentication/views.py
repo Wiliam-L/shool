@@ -5,7 +5,6 @@ from datetime import timedelta
 from django.utils import timezone
 import uuid
 from django.http import JsonResponse
-from django.views import View
 from .serializers import GroupSerializer, UserSerializer, CustomTokenObtainPairSerializer, UserShortSerailizer
 from django.contrib.auth.models import Group, User
 from rest_framework import viewsets, generics, status, serializers
