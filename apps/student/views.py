@@ -18,20 +18,29 @@ class ShowTeacherListApiView(ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
+        
         try:
-            teacher = Teacher.objects.get(user=user)
+            # Obtener al estudiante asociado al usuario
+            student = Student.objects.get(user=user)
         except Student.DoesNotExist:
-            return Course.objects.none()
-        
-        course_registrations = CourseRegistration.objects.filter(teacher=teacher)
+            return Teacher.objects.none()
+
+        # Obtener las inscripciones de cursos del estudiante
+        course_registrations = CourseRegistration.objects.filter(student=student)
+
         if not course_registrations.exists():
-            return Course.objects.none()
+            return Teacher.objects.none()
         
-        # Obtener las asignaciones de cursos de los registros
-        teacher_course_assignment = TeacherCourseAssignment.objects.filter(id__in=course_registrations.values_list('teacher_course_assignment', flat=True))
-        teachers_ids = teacher_course_assignment.values_list('teacher_id', flat=True)
+        # Obtener los IDs de los profesores de los cursos en los que el estudiante está inscrito
+        teacher_course_assignments = TeacherCourseAssignment.objects.filter(
+            id__in=course_registrations.values_list('teacher_course_assignment', flat=True)
+        )
         
+        teachers_ids = teacher_course_assignments.values_list('teacher_id', flat=True)
+        
+        # Devolver los profesores únicos asignados a esos cursos
         return Teacher.objects.filter(id__in=teachers_ids).distinct()
+
 
 
 class ShowCourseListApiView(ListAPIView):
