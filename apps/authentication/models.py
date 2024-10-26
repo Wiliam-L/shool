@@ -8,7 +8,7 @@ class EmailVerification(models.Model):
     code = models.UUIDField(default=uuid.uuid4)
     creation_date = models.DateTimeField(auto_now_add=True)
     expiration_date = models.DateTimeField()
-    verificated = models.BooleanField(default=False)  # Asegúrate de tener este campo
+    verificated = models.BooleanField(default=False)  
 
 
     class Meta:
